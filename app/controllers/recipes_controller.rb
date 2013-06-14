@@ -1,4 +1,6 @@
 class RecipesController < ApplicationController
+  require "open-uri"
+
   # GET /recipes
   # GET /recipes.json
   def index
@@ -41,6 +43,14 @@ class RecipesController < ApplicationController
   # POST /recipes.json
   def create
     @recipe = Recipe.new(params[:recipe])
+
+=begin
+if @recipe.title.blank?
+      simply_recipe_title = Nokogiri::HTML(open("http://www.simplyrecipes.com/recipes/#{{@recipe.title}}/)")
+      simple_recipe_title = simply_recipe_title.css('h1.entry-title')
+      @recipe.title = simple_recipe_title
+    end
+=end
 
     respond_to do |format|
       if @recipe.save
